@@ -95,8 +95,8 @@ void turnRight(int degrees) {
 
 void stopMotors() {
     Serial.println("Stopping");
-    servoLeft.writeMicroseconds(1500);
-    servoRight.writeMicroseconds(1500);
+    servoLeft.writeMicroseconds(1511);
+    servoRight.writeMicroseconds(1511);
 }
 
 // === Sensor Functions ===
