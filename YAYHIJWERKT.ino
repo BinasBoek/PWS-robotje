@@ -81,8 +81,8 @@ void loop() {
     }
     else if (incomingByte == 'S') {
       // Stop - Set both servos to neutral (stop moving)
-      servoLeft.writeMicroseconds(1500);  // Set left servo to neutral
-      servoRight.writeMicroseconds(1500); // Set right servo to neutral
+      servoLeft.writeMicroseconds(1511);  // Set left servo to neutral
+      servoRight.writeMicroseconds(1511); // Set right servo to neutral
       Serial.println("Stopping");
     }
     else {
