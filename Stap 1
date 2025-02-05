@@ -12,19 +12,19 @@ int buttonState = 0;
 int lastButtonState = 0; 
 bool motorState = false; 
 
-// Distance threshold for obstacle detection (in centimeters)
+// Distance threshold  obstacle detection 
 const int obstacleThreshold = 20;
 
 void setup() {
-  Serial.begin(9600);  // Initialize serial communication at 9600 baud rate
+  Serial.begin(9600);  // Initialize serial communication 9600 baud rate
   myServo1.attach(servoPin1); 
   myServo2.attach(servoPin2);
   pinMode(buttonPin, INPUT_PULLUP); 
-  pinMode(trigPin, OUTPUT);  // Set the trig pin as an output
-  pinMode(echoPin, INPUT);   // Set the echo pin as an input
+  pinMode(trigPin, OUTPUT);  // Set  trig pin as output
+  pinMode(echoPin, INPUT);   // Set  echo pin as input
 
-  myServo1.write(0);  // Initialize first servo to the 'off' position
-  myServo2.write(0);  // Initialize second servo to the 'off' position
+  myServo1.write(0);  // Initialize first servo  'off' position
+  myServo2.write(0);  // Initialize second servo  'off' position
 }
 
 void loop() {
@@ -67,9 +67,9 @@ long measureDistance() {
   delayMicroseconds(10); 
   digitalWrite(trigPin, LOW);
 
-  // Read the echo pulse
+  // Lees echo pulse
   long duration = pulseIn(echoPin, HIGH); 
-  long distance = duration * 0.034 / 2;  // Calculate the distance in cm
+  long distance = duration * 0.034 / 2;  // Calculate distance in cm
 
   return distance; 
 }
