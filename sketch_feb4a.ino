@@ -4,15 +4,10 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_LSM303_U.h>
 
-// Pin definitions for servos
 #define SERVO_LEFT_PIN 4
 #define SERVO_RIGHT_PIN 2
-
-// HC-SR04 Sensor Pins
 #define TRIG_PIN 8
 #define ECHO_PIN 9
-
-// Bluetooth Module pins
 #define BT_TX_PIN 11
 #define BT_RX_PIN 10
 
@@ -39,7 +34,6 @@ void setup() {
   Serial.begin(9600);
   btSerial.begin(9600); // Start Bluetooth communication
 
-  // Attach servos
   servoLeft.attach(SERVO_LEFT_PIN);
   servoRight.attach(SERVO_RIGHT_PIN);
 
@@ -80,7 +74,7 @@ void loop() {
     executeCommand(command);
   }
 
-  delay(100); // Small delay for stability
+  delay(100);
 }
 
 // Function to execute movement based on Bluetooth command
@@ -130,16 +124,16 @@ void moveBackward() {
 void stopMovement() {
   servoLeft.writeMicroseconds(1511);
   servoRight.writeMicroseconds(1511);
-  delay(200);  // Extra delay to ensure stopping
+  delay(200); 
   Serial.println("Stopped");
 }
 
 // Function to turn left with 90-degree detection
 void turnLeft() {
-  initialHeading = getHeading();  // Record the initial heading before turning
+  initialHeading = getHeading(); 
 
-  servoLeft.writeMicroseconds(800);    // Left servo moves backward
-  servoRight.writeMicroseconds(800);   // Right servo moves forward
+  servoLeft.writeMicroseconds(800);
+  servoRight.writeMicroseconds(800);
   Serial.println("Turning Left");
 
   // Keep turning until heading change reaches 55 degrees
@@ -155,8 +149,8 @@ void turnLeft() {
 void turnRight() {
   initialHeading = getHeading();  // Record the initial heading before turning
 
-  servoLeft.writeMicroseconds(1600);   // Left servo moves forward
-  servoRight.writeMicroseconds(1600);  // Right servo moves backward
+  servoLeft.writeMicroseconds(1600);
+  servoRight.writeMicroseconds(1600);
   Serial.println("Turning Right");
 
   // Keep turning until heading change reaches 60 degrees
