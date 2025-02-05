@@ -1,53 +1,53 @@
 #include <Servo.h>
 
 // Define ultrasonic sensor pins
-#define TRIG_PIN 11       // Trigger pin of the HC-SR04
-#define ECHO_PIN 12       // Echo pin of the HC-SR04
+#define TRIG_PIN 11       // Trigger pin of HC-SR04
+#define ECHO_PIN 12       // Echo pin of HC-SR04
 
 // Define motor control pins
-#define RIGHT_MOTOR_PIN 9 // Right motor (servo)
-#define LEFT_MOTOR_PIN 10 // Left motor (servo)
+#define RIGHT_MOTOR_PIN 9 // Right motor
+#define LEFT_MOTOR_PIN 10 // Left motor
 
 // Define button pin
-#define BUTTON_PIN 2      // Button pin for on/off control
+#define BUTTON_PIN 2      // Button pin voor on/off control
 
 Servo rightMotor;
 Servo leftMotor;
 
 long duration;
 int distance;
-bool isRobotOn = false; // State of the robot
-bool lastButtonState = HIGH; // Last state of the button
-unsigned long lastDebounceTime = 0; // Last debounce time
-unsigned long debounceDelay = 50; // Debounce delay in milliseconds
+bool isRobotOn = false; // State van de robot
+bool lastButtonState = HIGH; // Laatste state van de button
+unsigned long lastDebounceTime = 0; // Laatste debounce time
+unsigned long debounceDelay = 50; // Debounce delay
 
 void setup() {
-  // Initialize motors
+  // Initialiseer motoren
   rightMotor.attach(RIGHT_MOTOR_PIN);
   leftMotor.attach(LEFT_MOTOR_PIN);
 
-  // Set up the HC-SR04 sensor
+  // Set up HC-SR04 sensor
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
 
-  // Set up the button
+  // Set up button
   pinMode(BUTTON_PIN, INPUT_PULLUP);
 
-  // Start with the motors stopped
+  // Start met motors stopped
   stopMotors();
 }
 
 void loop() {
-  // Read the button state
+  // Read button state
   bool buttonState = digitalRead(BUTTON_PIN);
 
-  // Check if the button state has changed and handle debounce
+  // Check if button state changed 
   if (buttonState != lastButtonState) {
     lastDebounceTime = millis();
   }
 
   if ((millis() - lastDebounceTime) > debounceDelay) {
-    // If the button state is LOW and it was HIGH previously (rising edge detected)
+    // If button state is LOW and it was HIGH eerder 
     if (buttonState == LOW && lastButtonState == HIGH) {
       isRobotOn = !isRobotOn; // Toggle robot state
     }
@@ -55,59 +55,59 @@ void loop() {
 
   lastButtonState = buttonState;
 
-  // If the robot is on, perform obstacle avoidance
+  // If robot on, obstacle avoidance
   if (isRobotOn) {
     distance = measureDistance();
 
     if (distance < 10) {
-      stopMotors();        // Stop the robot
-      delay(500);          // Brief pause before turning
+      stopMotors();        // Stop robot
+      delay(500);          // Pause
 
-      turnRight90HalfSpeed(); // Turn 90 degrees to the right at half speed
-      delay(500);             // Pause after the turn
+      turnRight90HalfSpeed(); // Turn 90 degrees right  half speed
+      delay(500);             // Pause
 
       distance = measureDistance();
       if (distance < 10) {
-        turnLeft90HalfSpeed(); // Turn 90 degrees to the left at half speed
+        turnLeft90HalfSpeed(); // Turn 90 degrees left at half speed
         delay(500);            // Pause
       }
 
-      turnLeft90HalfSpeed();   // Turn back to the original direction at half speed
+      turnLeft90HalfSpeed();   // terug naar original direction at half speed
       delay(500);              // Pause
-      moveForwardHalfSpeed();  // Resume moving forward at half speed
+      moveForwardHalfSpeed();  // ga door moving forward half speed
     } else {
-      moveForwardHalfSpeed();  // Continue moving forward if no obstacle
+      moveForwardHalfSpeed();  // Continue moving forward wanneer no obstacle
     }
   } else {
-    stopMotors(); // Stop the robot if it's turned off
+    stopMotors(); // Stop robot if turned off
   }
 }
 
-// Function to move forward at half speed
+// Function move forward half speed
 void moveForwardHalfSpeed() {
-  rightMotor.write(135);  // Right motor moves forward at half speed
-  leftMotor.write(45);    // Left motor moves forward at half speed
+  rightMotor.write(135);  // Right motor  forward  half speed
+  leftMotor.write(45);    // Left motor forward half speed
 }
 
-// Function to stop motors
+// Function stop motors
 void stopMotors() {
-  rightMotor.write(90);   // Stop right motor
-  leftMotor.write(90);    // Stop left motor
+  rightMotor.write(90);   // Stop rechter motor
+  leftMotor.write(90);    // Stop linker motor
 }
 
-// Function to turn 90 degrees to the right at half speed
+// Function 90 degrees right at half speed
 void turnRight90HalfSpeed() {
-  rightMotor.write(90);   // Stop right motor
-  leftMotor.write(45);    // Left motor moves forward at half speed
-  delay(400);             // Adjust timing for a precise 90-degree turn
+  rightMotor.write(90);   // Stop rechter motor
+  leftMotor.write(45);    // linker motor forward half speed
+  delay(400);             //  90-degree turn
   stopMotors();
 }
 
-// Function to turn 90 degrees to the left at half speed
+// Function  90 degrees  left half speed
 void turnLeft90HalfSpeed() {
-  rightMotor.write(135);  // Right motor moves forward at half speed
-  leftMotor.write(90);    // Stop left motor
-  delay(400);             // Adjust timing for a precise 90-degree turn
+  rightMotor.write(135);  // rechter motor half speed
+  leftMotor.write(90);    // Stop linker motor
+  delay(400);             // 90-degree turn
   stopMotors();
 }
 
@@ -116,16 +116,14 @@ long measureDistance() {
   digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
 
-  // Trigger the ultrasonic pulse
+  // ultrasonic pulse
   digitalWrite(TRIG_PIN, HIGH);
   delayMicroseconds(10);
   digitalWrite(TRIG_PIN, LOW);
 
-  // Measure the duration of the echo
   duration = pulseIn(ECHO_PIN, HIGH);
 
-  // Calculate distance (distance = duration * speed of sound / 2)
-  // The speed of sound is approximately 343 meters per second at room temperature
+ 
   distance = duration * 0.0344 / 2;
 
   return distance;
