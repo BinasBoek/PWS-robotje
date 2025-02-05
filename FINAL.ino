@@ -29,18 +29,17 @@ void setup() {
   pinMode(ECHO_PIN, INPUT);
 
   stopMovement();
-  Serial.println("Robot Ready. Send 'S' to Start, 'X' to Stop, or 'R' to Turn 180°.");
 }
 
 void loop() {
-  checkBluetoothCommand(); // ✅ Always check for new commands
+  checkBluetoothCommand(); // check voor new commands
 
   if (movementStarted) {
     obstacleAvoidance();
   }
 }
 
-// ✅ Check Bluetooth for 'S' (Start), 'X' (Stop), and 'R' (Turn 180°)
+// Check Bluetooth voor 'S' (Start), 'X' (Stop), en 'R' (Turn 180°)
 void checkBluetoothCommand() {
   if (btSerial.available()) {
     char command = btSerial.read();
@@ -51,20 +50,20 @@ void checkBluetoothCommand() {
       movementStarted = true;
       Serial.println("Starting movement...");
     } 
-    else if (command == 'X') {  // ✅ Stop command
+    else if (command == 'X') {  // Stop command
       movementStarted = false;
       stopMovement();
       Serial.println("Robot Stopped!");
     } 
-    else if (command == 'R') {  // ✅ Turn 180° command
+    else if (command == 'R') {  // 180 graden command
       turn180();
     }
   }
 }
 
-// ✅ Get Distance Measurement
+// Distance meten
 int getDistance() {
-  delay(50); // Short delay for accuracy
+  delay(50); //  delay voor accuracy
 
   digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
@@ -73,7 +72,7 @@ int getDistance() {
   digitalWrite(TRIG_PIN, LOW);
 
   duration = pulseIn(ECHO_PIN, HIGH);
-  distance = duration * 0.0344 / 2; // Convert to cm
+  distance = duration * 0.0344 / 2; // Convert naar cm
 
   if (distance == 0 || distance > 200) { // Ignore invalid readings
     distance = 200;
@@ -84,7 +83,7 @@ int getDistance() {
   return distance;
 }
 
-// ✅ Movement Functions
+// movement functions
 void moveForward(int time) {
   servoLeft.writeMicroseconds(1200);
   servoRight.writeMicroseconds(1800);
@@ -118,13 +117,13 @@ void turnLeft(int time) {
 }
 
 void turn180() {
-  // Turn the robot 180 degrees
+  // Turn 180 graden
   Serial.println("Turning 180 degrees");
-  turnRight(2833);  // Use 2833 to turn 180 degrees
+  turnRight(2833);  //  2833 to turn 180 degrees
   Serial.println("Turned 180 degrees");
 }
 
-// ✅ Stop Movement
+// Stop Movement
 void stopMovement() {
   servoLeft.writeMicroseconds(1511);
   servoRight.writeMicroseconds(1511);
@@ -132,10 +131,10 @@ void stopMovement() {
   delay(500);
 }
 
-// ✅ Improved Obstacle Avoidance (Now Checks Bluetooth Command)
+//  Obstacle Avoidance
 void obstacleAvoidance() {
   while (movementStarted) {
-    checkBluetoothCommand();  // ✅ Check Bluetooth every cycle
+    checkBluetoothCommand();  // Check Bluetooth every cycle
 
     moveForward(600); 
     int frontDistance = getDistance();
