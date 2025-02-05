@@ -1,15 +1,11 @@
 #include <Servo.h>
 #include <SoftwareSerial.h>
 
-// Pin definitions for servos
+
 #define SERVO_LEFT_PIN 4
 #define SERVO_RIGHT_PIN 2
-
-// HC-SR04 Sensor Pins
 #define TRIG_PIN 8
 #define ECHO_PIN 9
-
-// Bluetooth Module pins
 #define BT_TX_PIN 11
 #define BT_RX_PIN 10
 
