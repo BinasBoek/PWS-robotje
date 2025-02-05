@@ -4,34 +4,28 @@
 #include <Servo.h>
 #include <SoftwareSerial.h>
 
-// Pin definitions
 #define TRIG_PIN 8
 #define ECHO_PIN 9
 #define SERVO_LEFT_PIN 4
 #define SERVO_RIGHT_PIN 2
-
-// Bluetooth Module pins
 #define BT_TX_PIN 10
 #define BT_RX_PIN 11
 
 // instances voor motoren en Bluetooth serial
 Servo servoLeft;
 Servo servoRight;
-SoftwareSerial btSerial(BT_RX_PIN, BT_TX_PIN); // Bluetooth module RX/TX
+SoftwareSerial btSerial(BT_RX_PIN, BT_TX_PIN); 
 
 // instance voor de LSM303DLHC sensor (accelerometer en kompas)
 Adafruit_LSM303_Accel_Unified accel = Adafruit_LSM303_Accel_Unified(12345);
 
 void setup() {
-  // Start serial communication
   Serial.begin(9600);
-  btSerial.begin(9600);  // Bluetooth baud rate
+  btSerial.begin(9600);
 
-  // Attach servo motoren
   servoLeft.attach(SERVO_LEFT_PIN);
   servoRight.attach(SERVO_RIGHT_PIN);
 
-  //  pin modes voor de US sensor
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
 
@@ -43,8 +37,7 @@ void setup() {
 
   Serial.println("Robot is ready!");
 
-  // Initial position servos 
-  servoLeft.write(90);  // forward position
+  servoLeft.write(90);
   servoRight.write(90); 
 }
 
@@ -64,15 +57,14 @@ void loop() {
   Serial.print("Distance: ");
   Serial.println(distance);
 
-  // beweeg op basis van afstand
-  if (distance > 10) { // No obstacle detected
-    // Beweeg forward
-    servoLeft.write(90);  // left servo forward
-    servoRight.write(90); // right servo forward
-  } else { // Obstacle detected
+
+  if (distance > 10) {
+    servoLeft.write(90);
+    servoRight.write(90);
+  } else { 
     // Stop en turn 
-    servoLeft.write(0);   // Turn left
-    servoRight.write(180); // Turn right
+    servoLeft.write(0);
+    servoRight.write(180);
   }
 
   // Lees accelerometer data
@@ -89,32 +81,28 @@ void loop() {
 
   // Check Bluetooth input 
   if (btSerial.available()) {
-    char incomingByte = btSerial.read(); // Read Bluetooth command
+    char incomingByte = btSerial.read();
     Serial.print("Received Bluetooth command: ");
     Serial.println(incomingByte);
 
     // control using Bluetooth
     if (incomingByte == 'F') {
-      // Move forward
       servoLeft.write(90);
       servoRight.write(90);
     }
     if (incomingByte == 'B') {
-      // Move backward
       servoLeft.write(180);
       servoRight.write(0);
     }
     if (incomingByte == 'L') {
-      // Turn left
       servoLeft.write(0);
       servoRight.write(90);
     }
     if (incomingByte == 'R') {
-      // Turn right
       servoLeft.write(90);
       servoRight.write(180);
     }
   }
 
-  delay(100);  // Small delay for stability
+  delay(100);
 }
