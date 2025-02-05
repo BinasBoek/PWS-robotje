@@ -140,27 +140,27 @@ void obstacleAvoidance() {
     int frontDistance = getDistance();
 
     if (frontDistance < 30) {  
-      Serial.println("🚨 Obstacle Detected! Deciding turn direction...");
+      Serial.println("Obstacle Detected! Deciding turn direction...");
       stopMovement();
 
       moveBackward(100);
 
-      Serial.println("🔄 Scanning Left...");
+      Serial.println("Scanning Left...");
       turnLeft(1416.5);
       int leftDistance = getDistance();
 
-      Serial.println("🔄 Scanning Right...");
+      Serial.println("Scanning Right...");
       turnRight(2833);
       int rightDistance = getDistance();
 
       turnLeft(1416.5);
 
       if (rightDistance > leftDistance) {
-        Serial.println("✅ Turning Right (More Space)");
+        Serial.println("Turning Right (More Space)");
         turnRight(1416.5);
         originalTurnDirection = 1;
       } else {
-        Serial.println("✅ Turning Left (More Space)");
+        Serial.println("Turning Left (More Space)");
         turnLeft(1416.5);
         originalTurnDirection = -1;
       }
@@ -168,10 +168,10 @@ void obstacleAvoidance() {
       moveForward(2500);
 
       if (originalTurnDirection == 1) {
-        Serial.println("🔄 Returning to Original Direction (Turning Left)");
+        Serial.println("Returning to Original Direction (Turning Left)");
         turnLeft(1416.5);
       } else if (originalTurnDirection == -1) {
-        Serial.println("🔄 Returning to Original Direction (Turning Right)");
+        Serial.println("Returning to Original Direction (Turning Right)");
         turnRight(1416.5);
       }
     }
