@@ -13,14 +13,12 @@ void setup() {
 }
 
 void loop() {
-  // Stuur een 10-microseconde puls naar de TRIG pin
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
 
-  // Lees de tijd dat de echo nodig heeft om terug te komen
   long duration = pulseIn(echoPin, HIGH);
 
   // Bereken de afstand in cm
@@ -31,7 +29,6 @@ void loop() {
   Serial.print(distance);
   Serial.println(" cm");
 
-  // Controleer de afstand en zet de juiste lampjes aan
   if (distance <= 25) {
     digitalWrite(greenLed, HIGH); // Groen lampje aan
     digitalWrite(redLed, LOW);   // Rood lampje uit
@@ -40,5 +37,5 @@ void loop() {
     digitalWrite(redLed, HIGH);  // Rood lampje aan
   }
 
-  delay(150); // Wacht 200 milliseconden voordat de meting opnieuw wordt gedaan
+  delay(150);
 }
