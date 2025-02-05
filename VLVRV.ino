@@ -12,27 +12,27 @@
 #define BT_TX_PIN 10
 #define BT_RX_PIN 11
 
-// Create instances for the servo motors and Bluetooth serial
+// instances servo motoren en Bluetooth serial
 Servo servoLeft;
 Servo servoRight;
 SoftwareSerial btSerial(BT_RX_PIN, BT_TX_PIN); // Bluetooth module on RX/TX
 
-// Create instance for the LSM303DLHC sensor (accelerometer and compass)
+// instance voor the LSM303DLHC sensor (accelerometer and compass)
 Adafruit_LSM303_Accel_Unified accel = Adafruit_LSM303_Accel_Unified(12345);
 
 void setup() {
     Serial.begin(9600);
     btSerial.begin(9600);  // Bluetooth baud rate
 
-    // Attach the servo motors
+    // Attach servo motors
     servoLeft.attach(SERVO_LEFT_PIN);
     servoRight.attach(SERVO_RIGHT_PIN);
 
-    // Set the pin modes for the ultrasonic sensor
+    // Set pin modes ultrasonic sensor
     pinMode(TRIG_PIN, OUTPUT);
     pinMode(ECHO_PIN, INPUT);
 
-    // Initialize LSM303DLHC
+    // Initialiseer LSM303DLHC
     if (!accel.begin()) {
         Serial.println("Could not initialize the accelerometer.");
         while (1);
