@@ -14,12 +14,12 @@
 #define BT_TX_PIN 10
 #define BT_RX_PIN 11
 
-// Create instances for the servo motors and Bluetooth serial
+// instances voor motoren en Bluetooth serial
 Servo servoLeft;
 Servo servoRight;
-SoftwareSerial btSerial(BT_RX_PIN, BT_TX_PIN); // Bluetooth module on RX/TX
+SoftwareSerial btSerial(BT_RX_PIN, BT_TX_PIN); // Bluetooth module RX/TX
 
-// Create instance for the LSM303DLHC sensor (accelerometer and compass)
+// instance voor de LSM303DLHC sensor (accelerometer en kompas)
 Adafruit_LSM303_Accel_Unified accel = Adafruit_LSM303_Accel_Unified(12345);
 
 void setup() {
@@ -27,15 +27,15 @@ void setup() {
   Serial.begin(9600);
   btSerial.begin(9600);  // Bluetooth baud rate
 
-  // Attach the servo motors
+  // Attach servo motoren
   servoLeft.attach(SERVO_LEFT_PIN);
   servoRight.attach(SERVO_RIGHT_PIN);
 
-  // Set the pin modes for the ultrasonic sensor
+  //  pin modes voor de US sensor
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
 
-  // Initialize LSM303DLHC
+  // Initialiseer LSM303DLHC
   if (!accel.begin()) {
     Serial.println("Could not initialize the accelerometer.");
     while (1);
@@ -43,13 +43,13 @@ void setup() {
 
   Serial.println("Robot is ready!");
 
-  // Initial positions for the servos (optional)
-  servoLeft.write(90);  // Set left servo to forward position
-  servoRight.write(90); // Set right servo to forward position
+  // Initial position servos 
+  servoLeft.write(90);  // forward position
+  servoRight.write(90); 
 }
 
 void loop() {
-  // Measure distance using HC-SR04 ultrasonic sensor
+  // Meet distance met de HC-SR04 ultrasonic sensor
   long duration, distance;
   digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
@@ -60,26 +60,26 @@ void loop() {
   duration = pulseIn(ECHO_PIN, HIGH);
   distance = (duration / 2) / 29.1;  // Calculate distance in cm
 
-  // Print distance for debugging
+  // serial print voor debugging
   Serial.print("Distance: ");
   Serial.println(distance);
 
-  // Move the robot based on distance measurement
+  // beweeg op basis van afstand
   if (distance > 10) { // No obstacle detected
-    // Move forward
-    servoLeft.write(90);  // Move left servo forward
-    servoRight.write(90); // Move right servo forward
+    // Beweeg forward
+    servoLeft.write(90);  // left servo forward
+    servoRight.write(90); // right servo forward
   } else { // Obstacle detected
-    // Stop and turn (basic avoidance strategy)
+    // Stop en turn 
     servoLeft.write(0);   // Turn left
     servoRight.write(180); // Turn right
   }
 
-  // Read accelerometer data
+  // Lees accelerometer data
   sensors_event_t event;
   accel.getEvent(&event);
 
-  // Output accelerometer readings for debugging
+  // Output accelerometer metingen voor debugging
   Serial.print("X: ");
   Serial.print(event.acceleration.x);
   Serial.print(" Y: ");
@@ -87,13 +87,13 @@ void loop() {
   Serial.print(" Z: ");
   Serial.println(event.acceleration.z);
 
-  // Check for Bluetooth input to control the robot
+  // Check Bluetooth input 
   if (btSerial.available()) {
-    char incomingByte = btSerial.read(); // Read the incoming Bluetooth command
+    char incomingByte = btSerial.read(); // Read Bluetooth command
     Serial.print("Received Bluetooth command: ");
     Serial.println(incomingByte);
 
-    // Example control using Bluetooth
+    // control using Bluetooth
     if (incomingByte == 'F') {
       // Move forward
       servoLeft.write(90);
