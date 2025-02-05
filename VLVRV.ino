@@ -4,13 +4,11 @@
 #include <Servo.h>
 #include <SoftwareSerial.h>
 
-// Pin definitions
+
 #define TRIG_PIN 8
 #define ECHO_PIN 9
 #define SERVO_LEFT_PIN 4
 #define SERVO_RIGHT_PIN 2
-
-// Bluetooth Module pins
 #define BT_TX_PIN 10
 #define BT_RX_PIN 11
 
@@ -54,12 +52,12 @@ void loop() {
 
 // === Movement Sequence Function ===
 void executeMovementSequence() {
-    moveForward(5000);  // Move forward for 5 seconds
-    turnLeft(90);       // Turn 90° left
-    moveForward(7000);  // Move forward for 7 seconds
-    turnRight(90);      // Turn 90° right
-    moveForward(2000);  // Move forward for 2 seconds
-    stopMotors();       // Stop at the end
+    moveForward(5000);
+    turnLeft(90);
+    moveForward(7000);
+    turnRight(90);
+    moveForward(2000);
+    stopMotors();
 }
 
 // === Motion Functions ===
