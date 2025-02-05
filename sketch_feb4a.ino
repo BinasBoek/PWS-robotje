@@ -11,11 +11,11 @@
 #define BT_TX_PIN 11
 #define BT_RX_PIN 10
 
-// Create instances for the servo motors
+// Create instances voor servo motoren
 Servo servoLeft;
 Servo servoRight;
 
-// Create instance for SoftwareSerial (Bluetooth)
+// Create instance voor SoftwareSerial (Bluetooth)
 SoftwareSerial btSerial(BT_RX_PIN, BT_TX_PIN);
 
 // HC-SR04 sensor variables
@@ -51,19 +51,19 @@ void setup() {
     while (1);
   }
 
-  // **Ensure servos are completely still at startup**
+// servos stil bij startup
   stopMovement();
   Serial.println("Robot ready!");
 }
 
 void loop() {
-  // Check for Bluetooth input
+  // Check voor Bluetooth input
   if (btSerial.available()) {
     command = btSerial.read();
     Serial.print("Received command: ");
     Serial.println(command);
 
-    // If an obstacle is detected, prevent movement
+    // If obstacle detected, geen movement
     if (getDistance() < 20) {
       stopMovement();
       Serial.println("Obstacle detected! Stopping.");
@@ -77,7 +77,7 @@ void loop() {
   delay(100);
 }
 
-// Function to execute movement based on Bluetooth command
+// Function om execute movement gebaseerd op Bluetooth command
 void executeCommand(char cmd) {
   if (cmd == 'F') moveForward();
   else if (cmd == 'B') moveBackward();
@@ -87,7 +87,7 @@ void executeCommand(char cmd) {
   else Serial.println("Unknown command");
 }
 
-// Function to get the distance from the HC-SR04 sensor
+// Function get distance van HC-SR04 sensor
 int getDistance() {
   digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
@@ -96,13 +96,13 @@ int getDistance() {
   digitalWrite(TRIG_PIN, LOW);
 
   duration = pulseIn(ECHO_PIN, HIGH);
-  distance = duration * 0.0344 / 2; // Convert time to distance in cm
+  distance = duration * 0.0344 / 2; // Convert tijd naar distance in cm
   Serial.print("Distance: ");
   Serial.println(distance);
   return distance;
 }
 
-// Function to move forward for 2 seconds
+// Function move forward voor 2 secondes
 void moveForward() {
   servoLeft.writeMicroseconds(800);
   servoRight.writeMicroseconds(1600);
@@ -111,7 +111,7 @@ void moveForward() {
   stopMovement();
 }
 
-// Function to move backward for 2 seconds
+// Function move backward voor 2 secondes
 void moveBackward() {
   servoLeft.writeMicroseconds(1600);
   servoRight.writeMicroseconds(800);
@@ -120,7 +120,7 @@ void moveBackward() {
   stopMovement();
 }
 
-// **Ensure the robot fully stops**
+// full stop
 void stopMovement() {
   servoLeft.writeMicroseconds(1511);
   servoRight.writeMicroseconds(1511);
@@ -128,7 +128,7 @@ void stopMovement() {
   Serial.println("Stopped");
 }
 
-// Function to turn left with 90-degree detection
+// Function turn left met 90-degree detection
 void turnLeft() {
   initialHeading = getHeading(); 
 
@@ -136,33 +136,33 @@ void turnLeft() {
   servoRight.writeMicroseconds(800);
   Serial.println("Turning Left");
 
-  // Keep turning until heading change reaches 55 degrees
+  // Keep turning tot heading change reaches 55 degrees
   while (abs(getHeadingDifference(initialHeading, getHeading())) < 55) {
     delay(10);
   }
 
-  stopMovement();  // Stop after completing the 90-degree turn
+  stopMovement();  // Stop na 90-degree turn
   Serial.println("Turned Left 90 degrees");
 }
 
-// Function to turn right with 90-degree detection
+//turn right  90-degree detectie
 void turnRight() {
-  initialHeading = getHeading();  // Record the initial heading before turning
+  initialHeading = getHeading();  // initial heading voor turning
 
   servoLeft.writeMicroseconds(1600);
   servoRight.writeMicroseconds(1600);
   Serial.println("Turning Right");
 
-  // Keep turning until heading change reaches 60 degrees
+  //  turning totdat heading change reaches 60 degrees
   while (abs(getHeadingDifference(initialHeading, getHeading())) < 60) {
     delay(10);
   }
 
-  stopMovement();  // Stop after completing the 90-degree turn
+  stopMovement();  // Stop na 90-degree turn
   Serial.println("Turned Right 90 degrees");
 }
 
-// Function to get the robot's current heading
+// Function voor robot's current heading
 float getHeading() {
   sensors_event_t event;
   mag.getEvent(&event);
@@ -173,7 +173,7 @@ float getHeading() {
   return heading;
 }
 
-// Function to calculate the heading change
+// Function calculate heading change
 float getHeadingDifference(float start, float current) {
   float diff = current - start;
   if (diff < -180) diff += 360;
